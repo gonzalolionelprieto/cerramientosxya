@@ -17,6 +17,7 @@ import ConfiguracionSistema from "./components/ConfiguracionSistema";
 import Fabrica from "./components/Fabrica";
 import GestionProductos from "./components/GestionProductos"; // Import GestionProductos
 import NotFound from "./pages/NotFound";
+import CrearPresupuesto from "./pages/CrearPresupuesto";
 
 const queryClient = new QueryClient();
 
@@ -29,7 +30,7 @@ const App = () => (
         <Layout>
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/pedidos/nuevo" element={<PedidosForm />} />
+            <Route path="/pedidos/nuevo" element={<CrearPresupuesto />} />
             <Route path="/pedidos" element={<PedidosList />} />
             <Route path="/instalaciones" element={<Instalaciones />} />
             <Route path="/logistica" element={<Logistica />} />

@@ -4,55 +4,51 @@ import {
   FormItem,
   FormLabel,
   FormControl,
+  FormMessage,
 } from "@/components/ui/form";
-import { SectionProps } from "./types";
-import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
+import type { SectionProps } from "./types";
 
-// ✅ PlantillaSelector bien tipado
-const PlantillaSelector = ({ form }: SectionProps) => {
-  return <div>Selector de Plantilla (pendiente de lógica)</div>;
+const PlantillaSelector: React.FC<SectionProps> = ({ form }) => {
+  return (
+    <div className="space-y-4">
+      <FormField
+        control={form.control}
+        name="tipo_sistema_presupuesto"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Tipo de sistema</FormLabel>
+            <FormControl>
+              <Select
+                value={field.value ?? ""}
+                onValueChange={field.onChange}
+                defaultValue={field.value ?? ""}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Seleccionar tipo de sistema..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="techo">Techo</SelectItem>
+                  <SelectItem value="baranda_postes">Baranda con Postes</SelectItem>
+                  <SelectItem value="baranda_click">Baranda Click</SelectItem>
+                  <SelectItem value="cerramiento">Cerramiento</SelectItem>
+                </SelectContent>
+              </Select>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+    </div>
+  );
 };
 
 export default PlantillaSelector;
-
-// ✅ ComposicionProducto correctamente exportado y funcionando
-export const ComposicionProducto = ({ form }: SectionProps) => (
-  <div className="grid grid-cols-3 gap-4">
-    <FormField
-      control={form.control}
-      name="medidas_ancho"
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>Ancho</FormLabel>
-          <FormControl>
-            <Input type="number" {...field} />
-          </FormControl>
-        </FormItem>
-      )}
-    />
-    <FormField
-      control={form.control}
-      name="medidas_alto"
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>Alto</FormLabel>
-          <FormControl>
-            <Input type="number" {...field} />
-          </FormControl>
-        </FormItem>
-      )}
-    />
-    <FormField
-      control={form.control}
-      name="medidas_prof"
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>Profundidad</FormLabel>
-          <FormControl>
-            <Input type="number" {...field} />
-          </FormControl>
-        </FormItem>
-      )}
-    />
-  </div>
-);
+// Este componente permite seleccionar el tipo de sistema del presupuesto
+// y se integra con el formulario principal para manejar el estado y la validación.

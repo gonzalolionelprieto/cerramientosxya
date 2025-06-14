@@ -5,6 +5,10 @@ import PresupuestoForm from '@/components/presupuestoForm';
 import { useCreatePresupuesto } from '@/hooks/usePresupuestos';
 import type { PresupuestoFormValues } from '@/components/presupuestoForm/types';
 import { supabase } from '@/integrations/supabase/client';
+import downloadPdfPresupuesto from '@/lib/pdf/downloadPdf';
+import type { TipoSistema } from '@/hooks/useTipoSistemaConfig';
+import { PresupuestoDB } from '@/types/PresupuestoDB';
+import { CONFIGS } from '@/hooks/useTipoSistemaConfig'; // ✅ importante
 
 const CrearPresupuestoPage: React.FC = () => {
   const navigate = useNavigate();
@@ -12,15 +16,18 @@ const CrearPresupuestoPage: React.FC = () => {
   const isLoading = status === 'pending';
 
   const handleSubmit = async (data: PresupuestoFormValues) => {
+    console.log('✅ Formulario enviado:', data); // ⬅️ este log
     try {
-      const payload = {
+      const payload: PresupuestoDB = {
         ...data,
         cliente_id: data.cliente_id!,
-        precio_total: 0,
-        generado_el: new Date().toISOString(),
+        costo_total: 0,
+        estado: 'pendiente',
+        fecha_creacion: new Date().toISOString(),
+        tipo_producto: "cerramiento", // ajustá si hace falta
+        sistema: data.tipo_sistema_presupuesto,
       };
 
-      // Guardar en Supabase
       const { data: inserted, error } = await supabase
         .from('presupuestos')
         .insert([payload])
@@ -29,31 +36,33 @@ const CrearPresupuestoPage: React.FC = () => {
 
       if (error) throw error;
 
-      // Llamar a API para generar PDF
-      const response = await fetch('/api/generar-pdf', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          tipo: data.tipo_sistema_presupuesto,
-          datos: payload,
-          presupuesto_id: inserted.id,
-        }),
+      // ✅ Accedemos a config
+      const config = CONFIGS[data.tipo_sistema_presupuesto as TipoSistema];
+
+      // ✅ Extraemos solo los campos requeridos por el PDF
+      const campos = config.camposEnPDF
+        ? Object.fromEntries(
+          Object.keys(config.camposEnPDF).map((key) => [key, data[key]])
+        )
+        : {};
+
+      // ✅ Generar PDF
+      await downloadPdfPresupuesto({
+        tipo_sistema_presupuesto: data.tipo_sistema_presupuesto,
+        campos,
       });
 
-      if (!response.ok) throw new Error('Error generando PDF');
-
-      toast.success('Presupuesto creado y PDF generado con éxito');
+      toast.success('Presupuesto creado y PDF descargado');
       navigate('/pedidos');
-    } catch (err) {
-      console.error(err);
-      toast.error('Error al crear presupuesto');
+    } catch (error) {
+      toast.error('Error al guardar presupuesto');
+      console.error(error);
     }
   };
 
   return (
     <div className="p-6 max-w-5xl mx-auto">
       <h1 className="text-2xl font-bold mb-6">Nuevo Presupuesto</h1>
-
       <PresupuestoForm
         onSubmit={handleSubmit}
         isLoading={isLoading}

@@ -1,18 +1,12 @@
 export interface PresupuestoDB {
   cliente_id: string;
-  tipo_producto: string;
-  sistema: string;
-  medidas_alto?: number;
-  medidas_ancho?: number;
-  cantidad_paneles?: number;
-  accesorios?: any; // JSON
-  trabajos_incluidos?: any;
-  aclaraciones?: string;
-  tiempo_estimado?: string;
-  garantia_meses?: number;
-  forma_pago?: string;
-  costo_total?: number;
-  costo_total_iv?: number;
-  estado?: string;
-  fecha_creacion?: string;
+  cliente_nombre: string;
+  domicilio: string;
+  telefono: string;
+  tipo_sistema_presupuesto: string;
+  cantidad_panos: number;
+  medidas: any; // o el tipo correcto de medidas
+  total: number;
+  estado?: string;           // ⬅ ahora es opcional
+  fecha_creacion?: string;   // ⬅ ahora es opcional
 }

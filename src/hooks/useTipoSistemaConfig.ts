@@ -4,18 +4,19 @@ export type TipoSistema =
   | "techo"
   | "baranda_postes"
   | "baranda_click"
-  | "cerramiento";
+  | "cerramiento"
+  | "baranda_escalera"
+  | "baranda_balcon";
 
 interface TipoSistemaConfig {
   nombreParaPDF: string;
   camposAdicionales: string[];
-  archivoPlantilla: string; // nombre de archivo PDF o ruta relativa
+  archivoPlantilla: string;
   camposEnPDF: {
-    [key: string]: string; // clave lógica => nombre en el PDF
+    [key: string]: string;
   };
 }
 
-// 👇 SE AGREGA ESTE EXPORT
 export const CONFIGS: Record<TipoSistema, TipoSistemaConfig> = {
   techo: {
     nombreParaPDF: "Techo Vidriado",
@@ -58,6 +59,26 @@ export const CONFIGS: Record<TipoSistema, TipoSistemaConfig> = {
       medidas_alto: "alto",
       cantidad_paneles: "paneles",
       color_vidrio: "color_vidrio",
+    },
+  },
+  baranda_escalera: {
+    nombreParaPDF: "Baranda Escalera",
+    archivoPlantilla: "Baranda Escalera.pdf",
+    camposAdicionales: ["altura_baranda", "inclinacion"],
+    camposEnPDF: {
+      medidas_ancho: "longitud",
+      altura_baranda: "altura",
+      inclinacion: "inclinacion",
+    },
+  },
+  baranda_balcon: {
+    nombreParaPDF: "Baranda Balcón",
+    archivoPlantilla: "Baranda Balcon.pdf",
+    camposAdicionales: ["altura_baranda", "tipo_vidrio"],
+    camposEnPDF: {
+      medidas_ancho: "longitud",
+      altura_baranda: "altura",
+      tipo_vidrio: "vidrio",
     },
   },
 };

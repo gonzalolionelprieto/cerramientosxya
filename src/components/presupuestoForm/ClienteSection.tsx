@@ -4,18 +4,38 @@ import { Input } from "@/components/ui/input";
 import { SectionProps } from "./types";
 
 const ClienteSection = ({ form }: SectionProps) => (
-  <FormField
+  <><FormField
     control={form.control}
-    name="cliente_id"
+    name="cliente_nombre"
     render={({ field }) => (
       <FormItem>
-        <FormLabel>Cliente</FormLabel>
+        <FormLabel>Nombre cliente</FormLabel>
         <FormControl>
-          <Input placeholder="ID o nombre del cliente" {...field} />
+          <Input placeholder="Nombre del cliente" {...field} />
         </FormControl>
       </FormItem>
-    )}
-  />
+    )} /><FormField
+      control={form.control}
+      name="domicilio"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Domicilio</FormLabel>
+          <FormControl>
+            <Input placeholder="Domicilio del cliente" {...field} />
+          </FormControl>
+        </FormItem>
+      )} /><FormField
+      control={form.control}
+      name="telefono"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Teléfono</FormLabel>
+          <FormControl>
+            <Input placeholder="Teléfono del cliente" {...field} />
+          </FormControl>
+        </FormItem>
+      )} /></>
+
 );
 
 export default ClienteSection;
